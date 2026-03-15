@@ -97,14 +97,22 @@ function WolfNodeComponent({ data, selected }: NodeProps & { data: WolfNodeData 
     }
   };
 
+  const handleStyle = {
+    background: color,
+    width: 12,
+    height: 12,
+    border: "2px solid #0a0a0f",
+    boxShadow: `0 0 4px ${color}88`,
+  };
+
   return (
-    <>
-      <Handle type="target" position={Position.Top} style={{ background: color, width: 8, height: 8, border: "2px solid #0a0a0f" }} />
+    <div className="wolf-node-wrapper">
+      <Handle type="target" position={Position.Top} style={handleStyle} />
       {renderShape()}
-      <Handle type="source" position={Position.Bottom} style={{ background: color, width: 8, height: 8, border: "2px solid #0a0a0f" }} />
-      <Handle type="target" position={Position.Left} style={{ background: color, width: 8, height: 8, border: "2px solid #0a0a0f" }} />
-      <Handle type="source" position={Position.Right} style={{ background: color, width: 8, height: 8, border: "2px solid #0a0a0f" }} />
-    </>
+      <Handle type="source" position={Position.Bottom} style={handleStyle} />
+      <Handle type="target" position={Position.Left} style={handleStyle} />
+      <Handle type="source" position={Position.Right} style={handleStyle} />
+    </div>
   );
 }
 

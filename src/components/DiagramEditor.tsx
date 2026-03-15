@@ -27,6 +27,18 @@ const nodeTypes: NodeTypes = {
   wolf: WolfNode,
 };
 
+const kbdStyle: React.CSSProperties = {
+  display: "inline-block",
+  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(255,255,255,0.15)",
+  borderRadius: 4,
+  padding: "1px 5px",
+  fontSize: 10,
+  fontFamily: "monospace",
+  marginRight: 6,
+  color: "#FAF5F0",
+};
+
 function getEdgeStyle(arrowType: ArrowType) {
   const entry = ARROW_TYPES.find((a) => a.id === arrowType);
   return entry?.style || {};
@@ -39,6 +51,13 @@ function Editor() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
+  const [showConnectHint, setShowConnectHint] = useState(true);
+
+  // Dismiss the connect hint after 8 seconds or on first connect
+  useEffect(() => {
+    const timer = setTimeout(() => setShowConnectHint(false), 8000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -174,7 +193,7 @@ function Editor() {
             edges={styledEdges}
             onNodesChange={store.onNodesChange}
             onEdgesChange={store.onEdgesChange}
-            onConnect={store.onConnect}
+            onConnect={(conn) => { store.onConnect(conn); setShowConnectHint(false); }}
             nodeTypes={nodeTypes}
             onNodeClick={(_, node) => {
               store.setSelectedNodeId(node.id);
@@ -213,6 +232,55 @@ function Editor() {
             />
             <LayerBands visible={store.showLayers} />
           </ReactFlow>
+          {/* Connection hint tooltip */}
+          {showConnectHint && (
+            <div
+              style={{
+                position: "absolute",
+                top: 12,
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "rgba(249, 115, 22, 0.9)",
+                color: "#fff",
+                padding: "8px 20px",
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 600,
+                zIndex: 50,
+                pointerEvents: "none",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+                whiteSpace: "nowrap",
+                animation: "fade-in 0.3s ease",
+              }}
+            >
+              Drag from a dot on any node to another node to connect them
+            </div>
+          )}
+          {/* Help overlay */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: 12,
+              right: 12,
+              background: "rgba(13, 13, 20, 0.85)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 8,
+              padding: "10px 14px",
+              fontSize: 11,
+              color: "#9CA3AF",
+              zIndex: 40,
+              lineHeight: 1.7,
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <div style={{ fontWeight: 700, color: "#FAF5F0", marginBottom: 4, fontSize: 12 }}>Shortcuts</div>
+            <div><kbd style={kbdStyle}>Del</kbd> Delete selected</div>
+            <div><kbd style={kbdStyle}>⌘Z</kbd> Undo</div>
+            <div><kbd style={kbdStyle}>⌘⇧Z</kbd> Redo</div>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginTop: 6, paddingTop: 6, color: "#F97316" }}>
+              Drag handle dots to connect
+            </div>
+          </div>
         </div>
         <PropertiesPanel
           selectedNode={selectedNode}
