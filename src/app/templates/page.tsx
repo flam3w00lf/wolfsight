@@ -27,6 +27,37 @@ export default function TemplatesPage() {
         <h1 className="text-3xl font-bold mb-2">Templates</h1>
         <p className="text-sm text-[#6B7280] mb-10">Pre-built architecture diagrams following the WolfSight standard.</p>
 
+        {/* Featured template */}
+        <Link
+          href="/templates/wolfpack-org"
+          className="block p-6 mb-6 rounded-xl border-2 border-[#7C3AED]/40 hover:border-[#7C3AED]/80 bg-[#7C3AED]/5 hover:bg-[#7C3AED]/10 transition-colors"
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[#7C3AED]/20 text-[#7C3AED] font-semibold">Featured</span>
+              </div>
+              <h3 className="text-lg font-bold">🐺 WolfPack Business Org</h3>
+              <p className="text-xs text-[#6B7280] mt-1">Full organizational chart for WolfPack Solutions — 10 departments, 40+ sub-departments, all agents mapped</p>
+            </div>
+            <div className="text-xs text-[#7C3AED]">
+              60+ nodes · 70+ edges
+            </div>
+          </div>
+          <div className="mt-3 flex gap-1.5 flex-wrap">
+            {["Flame (CEO)", "Wolf (Opus)", "Engineering", "Security", "Product", "Marketing", "Revenue", "Finance"].map((name) => (
+              <span
+                key={name}
+                className="text-[10px] px-2 py-0.5 rounded-full border"
+                style={{ borderColor: "rgba(124, 58, 237, 0.4)", color: "#7C3AED" }}
+              >
+                {name}
+              </span>
+            ))}
+            <span className="text-[10px] px-2 py-0.5 text-[#6B7280]">+50 more</span>
+          </div>
+        </Link>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {templates.map((t) => (
             <Link
