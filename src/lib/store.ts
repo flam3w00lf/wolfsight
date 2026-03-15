@@ -9,7 +9,7 @@ import {
   type NodeChange,
   type EdgeChange,
 } from "@xyflow/react";
-import type { WolfNode, WolfEdge, WolfEdgeData, Diagram, ArrowType, LayerId } from "./types";
+import type { WolfNode, WolfEdge, WolfEdgeData, Diagram, ArrowType, LayerId, EdgeDirection, EdgeRouting } from "./types";
 import { GRID_SIZE, getLayerForY } from "./constants";
 
 interface HistoryEntry {
@@ -84,11 +84,15 @@ export function useDiagramStore() {
         ...connection,
         id: `e-${Date.now()}`,
         label: "",
-        type: "default",
-        data: { arrowType: "solid" as ArrowType },
+        type: "smoothstep",
+        data: {
+          arrowType: "solid" as ArrowType,
+          direction: "forward" as EdgeDirection,
+          routing: "smoothstep" as EdgeRouting,
+        },
       } as unknown as WolfEdge;
-      const updated = addEdge(newEdge, eds);
-      return updated;
+      // Append directly instead of addEdge to allow unlimited connections per handle
+      return [...eds, newEdge];
     });
   }, []);
 
@@ -106,12 +110,14 @@ export function useDiagramStore() {
     );
   }, []);
 
-  const updateEdgeData = useCallback((edgeId: string, updates: Partial<WolfEdge>) => {
+  const updateEdgeData = useCallback((edgeId: string, updates: Partial<Omit<WolfEdge, 'data'>> & { data?: Partial<WolfEdgeData> }) => {
     setEdges((eds) =>
       eds.map((e) => {
         if (e.id !== edgeId) return e;
         const mergedData: WolfEdgeData = {
           arrowType: e.data?.arrowType ?? "solid",
+          direction: e.data?.direction ?? "forward",
+          routing: e.data?.routing ?? "smoothstep",
           ...(updates.data || {}),
         };
         return { ...e, ...updates, data: mergedData } as WolfEdge;

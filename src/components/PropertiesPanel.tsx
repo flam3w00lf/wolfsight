@@ -1,7 +1,7 @@
 "use client";
 
-import type { WolfNode, WolfEdge, ArrowType, LayerId } from "@/lib/types";
-import { LAYERS, ARROW_TYPES, COLORS } from "@/lib/constants";
+import type { WolfNode, WolfEdge, WolfEdgeData, ArrowType, LayerId, EdgeDirection, EdgeRouting } from "@/lib/types";
+import { LAYERS, ARROW_TYPES, EDGE_DIRECTIONS, EDGE_ROUTINGS, COLORS } from "@/lib/constants";
 
 interface Props {
   selectedNode: WolfNode | null;
@@ -9,7 +9,7 @@ interface Props {
   diagramTitle: string;
   diagramDescription: string;
   onUpdateNode: (id: string, data: Partial<WolfNode["data"]>) => void;
-  onUpdateEdge: (id: string, data: Partial<WolfEdge>) => void;
+  onUpdateEdge: (id: string, data: Partial<Omit<WolfEdge, 'data'>> & { data?: Partial<WolfEdgeData> }) => void;
   onSetTitle: (t: string) => void;
   onSetDescription: (d: string) => void;
   onExportJSON: () => void;
@@ -101,6 +101,7 @@ export default function PropertiesPanel({
                   className={inputClass}
                   value={(selectedEdge.label as string) || ""}
                   onChange={(e) => onUpdateEdge(selectedEdge.id, { label: e.target.value })}
+                  placeholder="Add label..."
                 />
               </div>
               <div>
@@ -112,6 +113,30 @@ export default function PropertiesPanel({
                 >
                   {ARROW_TYPES.map((a) => (
                     <option key={a.id} value={a.id}>{a.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <p className={labelClass}>Direction</p>
+                <select
+                  className={inputClass}
+                  value={selectedEdge.data?.direction || "forward"}
+                  onChange={(e) => onUpdateEdge(selectedEdge.id, { data: { direction: e.target.value as EdgeDirection } })}
+                >
+                  {EDGE_DIRECTIONS.map((d) => (
+                    <option key={d.id} value={d.id}>{d.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <p className={labelClass}>Edge Routing</p>
+                <select
+                  className={inputClass}
+                  value={selectedEdge.data?.routing || "smoothstep"}
+                  onChange={(e) => onUpdateEdge(selectedEdge.id, { data: { routing: e.target.value as EdgeRouting } })}
+                >
+                  {EDGE_ROUTINGS.map((r) => (
+                    <option key={r.id} value={r.id}>{r.label}</option>
                   ))}
                 </select>
               </div>

@@ -8,6 +8,7 @@ import {
   Controls,
   useReactFlow,
   ReactFlowProvider,
+  ConnectionMode,
   type NodeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -21,7 +22,8 @@ import TemplateModal from "./TemplateModal";
 import LayerBands from "./LayerBands";
 import { useDiagramStore } from "@/lib/store";
 import { ARROW_TYPES, COLORS } from "@/lib/constants";
-import type { WolfNode as WolfNodeType, WolfEdge, Diagram, ArrowType } from "@/lib/types";
+import type { WolfNode as WolfNodeType, WolfEdge, Diagram, ArrowType, EdgeDirection, EdgeRouting } from "@/lib/types";
+import { MarkerType } from "@xyflow/react";
 
 const nodeTypes: NodeTypes = {
   wolf: WolfNode,
@@ -102,14 +104,33 @@ function Editor() {
     [store.edges, store.selectedEdgeId]
   );
 
-  // Style edges based on arrow type
+  // Style edges based on arrow type, direction, and routing
   const styledEdges = useMemo(
     () =>
-      store.edges.map((e) => ({
-        ...e,
-        style: getEdgeStyle(e.data?.arrowType || "solid"),
-        animated: e.data?.arrowType === "dashed",
-      })),
+      store.edges.map((e) => {
+        const style = getEdgeStyle(e.data?.arrowType || "solid");
+        const direction: EdgeDirection = e.data?.direction || "forward";
+        const routing: EdgeRouting = e.data?.routing || "smoothstep";
+        const edgeColor = (style as Record<string, unknown>).stroke as string || COLORS.ironclad;
+
+        const markerEnd = direction === "reverse"
+          ? undefined
+          : { type: MarkerType.ArrowClosed, color: edgeColor };
+        const markerStart = direction === "reverse"
+          ? { type: MarkerType.ArrowClosed, color: edgeColor }
+          : direction === "bidirectional"
+          ? { type: MarkerType.ArrowClosed, color: edgeColor }
+          : undefined;
+
+        return {
+          ...e,
+          type: routing,
+          style,
+          animated: e.data?.arrowType === "dashed",
+          markerEnd,
+          markerStart,
+        };
+      }),
     [store.edges]
   );
 
@@ -207,14 +228,15 @@ function Editor() {
               store.setSelectedNodeId(null);
               store.setSelectedEdgeId(null);
             }}
+            connectionMode={ConnectionMode.Loose}
             snapToGrid
             snapGrid={[20, 20]}
             fitView
             proOptions={{ hideAttribution: true }}
             defaultEdgeOptions={{
-              type: "default",
+              type: "smoothstep",
               style: { stroke: COLORS.ironclad, strokeWidth: 2 },
-              markerEnd: { type: "arrowclosed" as never, color: COLORS.ironclad },
+              markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.ironclad },
             }}
             style={{ background: COLORS.bg }}
           >

@@ -1,4 +1,4 @@
-import type { Layer, LayerId, WolfNodeType } from "./types";
+import type { Layer, LayerId, WolfNodeType, EdgeDirection, EdgeRouting } from "./types";
 
 export const COLORS = {
   alpha: "#F97316",
@@ -39,6 +39,19 @@ export const ARROW_TYPES: { id: string; label: string; style: Record<string, str
   { id: "double", label: "Auth Flow", style: { stroke: COLORS.fang, strokeWidth: 4 } },
   { id: "red", label: "Destructive", style: { stroke: COLORS.fang, strokeWidth: 2 } },
   { id: "purple", label: "AI Inference", style: { stroke: COLORS.howl, strokeWidth: 2 } },
+];
+
+export const EDGE_DIRECTIONS: { id: EdgeDirection; label: string }[] = [
+  { id: "forward", label: "One-way (A → B)" },
+  { id: "reverse", label: "Reverse (B → A)" },
+  { id: "bidirectional", label: "Bidirectional (A ↔ B)" },
+];
+
+export const EDGE_ROUTINGS: { id: EdgeRouting; label: string }[] = [
+  { id: "smoothstep", label: "Smooth Step" },
+  { id: "bezier", label: "Bezier" },
+  { id: "straight", label: "Straight" },
+  { id: "step", label: "Step" },
 ];
 
 export const GRID_SIZE = 20;

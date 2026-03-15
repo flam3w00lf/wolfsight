@@ -7,6 +7,9 @@ export type ArrowType =
   | "red"
   | "purple";
 
+export type EdgeDirection = "forward" | "reverse" | "bidirectional";
+export type EdgeRouting = "smoothstep" | "bezier" | "straight" | "step";
+
 export type LayerId =
   | "surface"
   | "gates"
@@ -35,6 +38,8 @@ export interface WolfNodeData {
 
 export interface WolfEdgeData {
   arrowType: ArrowType;
+  direction?: EdgeDirection;
+  routing?: EdgeRouting;
   [key: string]: unknown;
 }
 

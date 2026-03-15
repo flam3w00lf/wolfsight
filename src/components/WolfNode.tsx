@@ -105,13 +105,32 @@ function WolfNodeComponent({ data, selected }: NodeProps & { data: WolfNodeData 
     boxShadow: `0 0 4px ${color}88`,
   };
 
+  // Multiple handles per side for spreading connections
+  // Each side has 3 handles: top/left, center, bottom/right
+  // All handles are both source and target for maximum flexibility
   return (
     <div className="wolf-node-wrapper">
-      <Handle type="target" position={Position.Top} style={handleStyle} />
+      {/* Top handles */}
+      <Handle type="target" position={Position.Top} id="top-left" isConnectable style={{ ...handleStyle, left: "25%" }} />
+      <Handle type="target" position={Position.Top} id="top-center" isConnectable style={handleStyle} />
+      <Handle type="target" position={Position.Top} id="top-right" isConnectable style={{ ...handleStyle, left: "75%" }} />
+
+      {/* Bottom handles */}
+      <Handle type="source" position={Position.Bottom} id="bottom-left" isConnectable style={{ ...handleStyle, left: "25%" }} />
+      <Handle type="source" position={Position.Bottom} id="bottom-center" isConnectable style={handleStyle} />
+      <Handle type="source" position={Position.Bottom} id="bottom-right" isConnectable style={{ ...handleStyle, left: "75%" }} />
+
+      {/* Left handles */}
+      <Handle type="target" position={Position.Left} id="left-top" isConnectable style={{ ...handleStyle, top: "25%" }} />
+      <Handle type="target" position={Position.Left} id="left-center" isConnectable style={handleStyle} />
+      <Handle type="target" position={Position.Left} id="left-bottom" isConnectable style={{ ...handleStyle, top: "75%" }} />
+
+      {/* Right handles */}
+      <Handle type="source" position={Position.Right} id="right-top" isConnectable style={{ ...handleStyle, top: "25%" }} />
+      <Handle type="source" position={Position.Right} id="right-center" isConnectable style={handleStyle} />
+      <Handle type="source" position={Position.Right} id="right-bottom" isConnectable style={{ ...handleStyle, top: "75%" }} />
+
       {renderShape()}
-      <Handle type="source" position={Position.Bottom} style={handleStyle} />
-      <Handle type="target" position={Position.Left} style={handleStyle} />
-      <Handle type="source" position={Position.Right} style={handleStyle} />
     </div>
   );
 }
