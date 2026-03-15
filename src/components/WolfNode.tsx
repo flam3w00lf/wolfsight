@@ -97,38 +97,13 @@ function WolfNodeComponent({ data, selected }: NodeProps & { data: WolfNodeData 
     }
   };
 
-  const handleStyle = {
-    background: color,
-    width: 12,
-    height: 12,
-    border: "2px solid #0a0a0f",
-    boxShadow: `0 0 4px ${color}88`,
-  };
-
-  // Multiple handles per side for spreading connections
-  // Each side has 3 handles: top/left, center, bottom/right
-  // All handles are both source and target for maximum flexibility
+  // 4 handles total: one centered on each side, big and obvious
   return (
     <div className="wolf-node-wrapper">
-      {/* Top handles */}
-      <Handle type="target" position={Position.Top} id="top-left" isConnectable style={{ ...handleStyle, left: "25%" }} />
-      <Handle type="target" position={Position.Top} id="top-center" isConnectable style={handleStyle} />
-      <Handle type="target" position={Position.Top} id="top-right" isConnectable style={{ ...handleStyle, left: "75%" }} />
-
-      {/* Bottom handles */}
-      <Handle type="source" position={Position.Bottom} id="bottom-left" isConnectable style={{ ...handleStyle, left: "25%" }} />
-      <Handle type="source" position={Position.Bottom} id="bottom-center" isConnectable style={handleStyle} />
-      <Handle type="source" position={Position.Bottom} id="bottom-right" isConnectable style={{ ...handleStyle, left: "75%" }} />
-
-      {/* Left handles */}
-      <Handle type="target" position={Position.Left} id="left-top" isConnectable style={{ ...handleStyle, top: "25%" }} />
-      <Handle type="target" position={Position.Left} id="left-center" isConnectable style={handleStyle} />
-      <Handle type="target" position={Position.Left} id="left-bottom" isConnectable style={{ ...handleStyle, top: "75%" }} />
-
-      {/* Right handles */}
-      <Handle type="source" position={Position.Right} id="right-top" isConnectable style={{ ...handleStyle, top: "25%" }} />
-      <Handle type="source" position={Position.Right} id="right-center" isConnectable style={handleStyle} />
-      <Handle type="source" position={Position.Right} id="right-bottom" isConnectable style={{ ...handleStyle, top: "75%" }} />
+      <Handle type="target" position={Position.Top} id="top-center" isConnectable className="wolf-handle" />
+      <Handle type="source" position={Position.Bottom} id="bottom-center" isConnectable className="wolf-handle" />
+      <Handle type="target" position={Position.Left} id="left-center" isConnectable className="wolf-handle" />
+      <Handle type="source" position={Position.Right} id="right-center" isConnectable className="wolf-handle" />
 
       {renderShape()}
     </div>
