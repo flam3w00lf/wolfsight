@@ -1,0 +1,907 @@
+{
+  "title": "WolfPack \u2014 The Machine",
+  "description": "How WolfPack Solution operates \u2014 the cascade system that runs our business",
+  "nodes": [
+    {
+      "id": "flame",
+      "type": "wolf",
+      "position": {
+        "x": 600,
+        "y": 0
+      },
+      "data": {
+        "label": "\ud83d\udd25 Flame (James)",
+        "description": "CEO \u2014 Human Operator\nDirectives + Approvals",
+        "layer": "surface",
+        "wolfNodeType": "person",
+        "customColor": "#7C3AED"
+      }
+    },
+    {
+      "id": "assistant",
+      "type": "wolf",
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "data": {
+        "label": "\ud83e\udd16 Assistant",
+        "description": "Gemini Flash \u2014 Triage\nScheduling, quick answers",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "wolf",
+      "type": "wolf",
+      "position": {
+        "x": 600,
+        "y": 150
+      },
+      "data": {
+        "label": "\ud83d\udc3a Wolf",
+        "description": "Opus \u2014 COO\nOrchestrates everything",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#7C3AED"
+      }
+    },
+    {
+      "id": "priority",
+      "type": "wolf",
+      "position": {
+        "x": 1000,
+        "y": 150
+      },
+      "data": {
+        "label": "\ud83d\udccb PRIORITY-MAP.md",
+        "description": "Single source of truth\nWhat matters RIGHT NOW",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#F97316"
+      }
+    },
+    {
+      "id": "vp-build",
+      "type": "wolf",
+      "position": {
+        "x": 100,
+        "y": 350
+      },
+      "data": {
+        "label": "\ud83d\udee0\ufe0f VP-BUILD",
+        "description": "Sonnet \u2014 2hr pulse\nEngineering + Product + QA",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#F97316"
+      }
+    },
+    {
+      "id": "vp-grow",
+      "type": "wolf",
+      "position": {
+        "x": 400,
+        "y": 350
+      },
+      "data": {
+        "label": "\ud83d\udcc8 VP-GROW",
+        "description": "Flash \u2014 2hr pulse\nMarketing + Revenue",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#3B82F6"
+      }
+    },
+    {
+      "id": "vp-protect",
+      "type": "wolf",
+      "position": {
+        "x": 700,
+        "y": 350
+      },
+      "data": {
+        "label": "\ud83d\udd12 VP-PROTECT",
+        "description": "Sonnet \u2014 Weekly\nSecurity",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#DC2626"
+      }
+    },
+    {
+      "id": "vp-know",
+      "type": "wolf",
+      "position": {
+        "x": 1000,
+        "y": 350
+      },
+      "data": {
+        "label": "\ud83d\udd0d VP-KNOW",
+        "description": "Flash \u2014 4hr pulse\nResearch + Knowledge",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "vp-measure",
+      "type": "wolf",
+      "position": {
+        "x": 1300,
+        "y": 350
+      },
+      "data": {
+        "label": "\ud83d\udce1 VP-MEASURE",
+        "description": "Flash \u2014 6hr pulse\nData + Analytics",
+        "layer": "pack",
+        "wolfNodeType": "hexagon",
+        "customColor": "#16A34A"
+      }
+    },
+    {
+      "id": "eng",
+      "type": "wolf",
+      "position": {
+        "x": 0,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udee0\ufe0f Engineering",
+        "description": "Spark \u2014 Sonnet\n6 projects",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#F97316"
+      }
+    },
+    {
+      "id": "prod",
+      "type": "wolf",
+      "position": {
+        "x": 200,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udce6 Product",
+        "description": "Atlas \u2014 Sonnet\nFeatures + UX",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#F97316"
+      }
+    },
+    {
+      "id": "qa",
+      "type": "wolf",
+      "position": {
+        "x": 100,
+        "y": 700
+      },
+      "data": {
+        "label": "\ud83e\uddea QA",
+        "description": "Forge \u2014 Flash\nTesting + bugs",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "mkt",
+      "type": "wolf",
+      "position": {
+        "x": 350,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udcc8 Marketing",
+        "description": "Flash\nContent + SEO + Social",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#3B82F6"
+      }
+    },
+    {
+      "id": "rev",
+      "type": "wolf",
+      "position": {
+        "x": 500,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udcb0 Revenue",
+        "description": "Flash\nGumroad + Funnels",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#3B82F6"
+      }
+    },
+    {
+      "id": "sec",
+      "type": "wolf",
+      "position": {
+        "x": 650,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udd12 Security",
+        "description": "Sonnet\nAudits + Compliance",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#DC2626"
+      }
+    },
+    {
+      "id": "res",
+      "type": "wolf",
+      "position": {
+        "x": 900,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udd0d Research",
+        "description": "Flash\nMarket intel + Scouting",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "know",
+      "type": "wolf",
+      "position": {
+        "x": 1100,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udcda Knowledge",
+        "description": "Flash\nDocs + SOPs",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "data",
+      "type": "wolf",
+      "position": {
+        "x": 1250,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udce1 Data",
+        "description": "Flash\nTelemetry + Metrics",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#16A34A"
+      }
+    },
+    {
+      "id": "fin",
+      "type": "wolf",
+      "position": {
+        "x": 1400,
+        "y": 550
+      },
+      "data": {
+        "label": "\ud83d\udcca Finance",
+        "description": "Flash\nRevenue + Legal",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#16A34A"
+      }
+    },
+    {
+      "id": "strat",
+      "type": "wolf",
+      "position": {
+        "x": 800,
+        "y": 700
+      },
+      "data": {
+        "label": "\ud83e\udde0 Strategy",
+        "description": "Wolf handles\nOKRs + Roadmap",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#F97316"
+      }
+    },
+    {
+      "id": "vibesniffer",
+      "type": "wolf",
+      "position": {
+        "x": 0,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83d\udd0d VibeSniffer",
+        "description": "vibesniffer.com\n$4.99 \u2014 Code scanner",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#06B6D4"
+      }
+    },
+    {
+      "id": "crm",
+      "type": "wolf",
+      "position": {
+        "x": 200,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83d\udc3a WolfPack CRM",
+        "description": "wolfpack-crm.vercel.app\nAgent CRM",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#06B6D4"
+      }
+    },
+    {
+      "id": "usage",
+      "type": "wolf",
+      "position": {
+        "x": 400,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83d\udcca Usage Tracker",
+        "description": "wolfpack-usage.vercel.app\nModel costs",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#06B6D4"
+      }
+    },
+    {
+      "id": "wolfsight",
+      "type": "wolf",
+      "position": {
+        "x": 600,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83d\udc41\ufe0f WolfSight",
+        "description": "wolfsight.vercel.app\nDiagram builder",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#06B6D4"
+      }
+    },
+    {
+      "id": "wolfsite",
+      "type": "wolf",
+      "position": {
+        "x": 800,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83c\udf10 wolfpacksolution.com",
+        "description": "Ecosystem site\n30 pages + blog + forum",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#06B6D4"
+      }
+    },
+    {
+      "id": "guides",
+      "type": "wolf",
+      "position": {
+        "x": 1050,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83d\udcda Guides (3 live)",
+        "description": "DeFi $27 | Vibe $47\nPrompts $9.99",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#3B82F6"
+      }
+    },
+    {
+      "id": "wolfden",
+      "type": "wolf",
+      "position": {
+        "x": 1300,
+        "y": 900
+      },
+      "data": {
+        "label": "\ud83c\udfe0 WolfDen",
+        "description": "Smart home dashboard\n#roundtable",
+        "layer": "pack",
+        "wolfNodeType": "rectangle",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "supabase",
+      "type": "wolf",
+      "position": {
+        "x": 200,
+        "y": 1100
+      },
+      "data": {
+        "label": "\ud83d\uddc4\ufe0f Supabase",
+        "description": "Auth + DB\nPostgreSQL",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#16A34A"
+      }
+    },
+    {
+      "id": "stripe",
+      "type": "wolf",
+      "position": {
+        "x": 450,
+        "y": 1100
+      },
+      "data": {
+        "label": "\ud83d\udcb3 Stripe",
+        "description": "Payments\nWebhooks",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#635BFF"
+      }
+    },
+    {
+      "id": "vercel",
+      "type": "wolf",
+      "position": {
+        "x": 700,
+        "y": 1100
+      },
+      "data": {
+        "label": "\u25b2 Vercel",
+        "description": "Hosting\n5 sites",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "cloudflare",
+      "type": "wolf",
+      "position": {
+        "x": 950,
+        "y": 1100
+      },
+      "data": {
+        "label": "\u2601\ufe0f Cloudflare",
+        "description": "DNS\n2 domains",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#F97316"
+      }
+    },
+    {
+      "id": "1password",
+      "type": "wolf",
+      "position": {
+        "x": 1200,
+        "y": 1100
+      },
+      "data": {
+        "label": "\ud83d\udd10 1Password",
+        "description": "12+ secrets\nService account",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#0572EC"
+      }
+    },
+    {
+      "id": "bluesky",
+      "type": "wolf",
+      "position": {
+        "x": 100,
+        "y": 1250
+      },
+      "data": {
+        "label": "\ud83e\udd8b Bluesky",
+        "description": "Social\n@wolfpacksolution",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#3B82F6"
+      }
+    },
+    {
+      "id": "github",
+      "type": "wolf",
+      "position": {
+        "x": 400,
+        "y": 1250
+      },
+      "data": {
+        "label": "\ud83d\udc19 GitHub",
+        "description": "6 repos\nCI/CD",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#6B7280"
+      }
+    },
+    {
+      "id": "discord",
+      "type": "wolf",
+      "position": {
+        "x": 700,
+        "y": 1250
+      },
+      "data": {
+        "label": "\ud83d\udcac Discord",
+        "description": "Ops + VP reports\nCluster channels",
+        "layer": "burrow",
+        "wolfNodeType": "rectangle",
+        "customColor": "#5865F2"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "flame",
+      "target": "wolf",
+      "label": "directives",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e2",
+      "source": "flame",
+      "target": "assistant",
+      "label": "daily comms",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e3",
+      "source": "assistant",
+      "target": "wolf",
+      "label": "triage",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e4",
+      "source": "wolf",
+      "target": "priority",
+      "label": "writes",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-vp-build",
+      "source": "wolf",
+      "target": "vp-build",
+      "label": "",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-vp-grow",
+      "source": "wolf",
+      "target": "vp-grow",
+      "label": "",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-vp-protect",
+      "source": "wolf",
+      "target": "vp-protect",
+      "label": "",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-vp-know",
+      "source": "wolf",
+      "target": "vp-know",
+      "label": "",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-vp-measure",
+      "source": "wolf",
+      "target": "vp-measure",
+      "label": "",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-build-eng",
+      "source": "vp-build",
+      "target": "eng",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-build-prod",
+      "source": "vp-build",
+      "target": "prod",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-build-qa",
+      "source": "vp-build",
+      "target": "qa",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-grow-mkt",
+      "source": "vp-grow",
+      "target": "mkt",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-grow-rev",
+      "source": "vp-grow",
+      "target": "rev",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-protect-sec",
+      "source": "vp-protect",
+      "target": "sec",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-know-res",
+      "source": "vp-know",
+      "target": "res",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-know-know",
+      "source": "vp-know",
+      "target": "know",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-vp-measure-data",
+      "source": "vp-measure",
+      "target": "data",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-strat",
+      "source": "wolf",
+      "target": "strat",
+      "label": "direct",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-wolf-fin",
+      "source": "wolf",
+      "target": "fin",
+      "label": "direct",
+      "data": {
+        "arrowType": "purple",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-vs",
+      "source": "eng",
+      "target": "vibesniffer",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-crm",
+      "source": "eng",
+      "target": "crm",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-usage",
+      "source": "eng",
+      "target": "usage",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-ws",
+      "source": "eng",
+      "target": "wolfsight",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-site",
+      "source": "eng",
+      "target": "wolfsite",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-wd",
+      "source": "eng",
+      "target": "wolfden",
+      "label": "",
+      "data": {
+        "arrowType": "dashed",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-rev-guides",
+      "source": "rev",
+      "target": "guides",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-mkt-site",
+      "source": "mkt",
+      "target": "wolfsite",
+      "label": "",
+      "data": {
+        "arrowType": "solid",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-sec",
+      "source": "eng",
+      "target": "sec",
+      "label": "code review",
+      "data": {
+        "arrowType": "dashed",
+        "direction": "bidirectional",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-eng-qa",
+      "source": "eng",
+      "target": "qa",
+      "label": "test loop",
+      "data": {
+        "arrowType": "dashed",
+        "direction": "bidirectional",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-prod-eng",
+      "source": "prod",
+      "target": "eng",
+      "label": "build loop",
+      "data": {
+        "arrowType": "solid",
+        "direction": "bidirectional",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-mkt-rev",
+      "source": "mkt",
+      "target": "rev",
+      "label": "funnel",
+      "data": {
+        "arrowType": "solid",
+        "direction": "bidirectional",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-res-strat",
+      "source": "res",
+      "target": "strat",
+      "label": "intel",
+      "data": {
+        "arrowType": "dashed",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    },
+    {
+      "id": "e-data-strat",
+      "source": "data",
+      "target": "strat",
+      "label": "metrics",
+      "data": {
+        "arrowType": "dashed",
+        "direction": "forward",
+        "routing": "smoothstep"
+      }
+    }
+  ]
+}

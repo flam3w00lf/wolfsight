@@ -10,7 +10,8 @@ import {
   type EdgeChange,
 } from "@xyflow/react";
 import type { WolfNode, WolfEdge, WolfEdgeData, Diagram, ArrowType, LayerId, EdgeDirection, EdgeRouting } from "./types";
-import { GRID_SIZE, getLayerForY } from "./constants";
+import { GRID_SIZE, getLayerForY, COLORS } from "./constants";
+import { autoLayout } from "./autoLayout";
 
 interface HistoryEntry {
   nodes: WolfNode[];
@@ -126,16 +127,65 @@ export function useDiagramStore() {
   }, []);
 
   const deleteSelected = useCallback(() => {
-    if (selectedNodeId) {
-      setNodes((nds) => nds.filter((n) => n.id !== selectedNodeId));
-      setEdges((eds) => eds.filter((e) => e.source !== selectedNodeId && e.target !== selectedNodeId));
-      setSelectedNodeId(null);
-    }
+    setNodes((nds) => {
+      const selectedIds = nds.filter((n) => n.selected).map((n) => n.id);
+      if (selectedNodeId) selectedIds.push(selectedNodeId);
+      const idsToDelete = new Set(selectedIds);
+      if (idsToDelete.size > 0) {
+        setEdges((eds) => eds.filter((e) => !idsToDelete.has(e.source) && !idsToDelete.has(e.target)));
+        return nds.filter((n) => !idsToDelete.has(n.id));
+      }
+      return nds;
+    });
+    setSelectedNodeId(null);
     if (selectedEdgeId) {
       setEdges((eds) => eds.filter((e) => e.id !== selectedEdgeId));
       setSelectedEdgeId(null);
     }
   }, [selectedNodeId, selectedEdgeId]);
+
+  const selectAll = useCallback(() => {
+    setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
+  }, []);
+
+  const groupSelectedNodes = useCallback(() => {
+    setNodes((nds) => {
+      const selected = nds.filter((n) => n.selected);
+      if (selected.length < 2) return nds;
+
+      const padding = 40;
+      const minX = Math.min(...selected.map((n) => n.position.x)) - padding;
+      const minY = Math.min(...selected.map((n) => n.position.y)) - padding;
+      const maxX = Math.max(...selected.map((n) => n.position.x + (n.measured?.width ?? 180))) + padding;
+      const maxY = Math.max(...selected.map((n) => n.position.y + (n.measured?.height ?? 60))) + padding;
+
+      const groupNode: WolfNode = {
+        id: `group-${Date.now()}`,
+        type: "wolf",
+        position: { x: minX, y: minY },
+        style: { width: maxX - minX, height: maxY - minY, zIndex: -1 },
+        data: {
+          label: "Group",
+          description: "",
+          layer: getLayerForY(minY),
+          wolfNodeType: "systemBoundary",
+          customColor: COLORS.den,
+        },
+      };
+
+      const updated = [...nds.map((n) => ({ ...n, selected: false })), groupNode];
+      pushHistory(updated, edges);
+      return updated;
+    });
+  }, [edges, pushHistory]);
+
+  const runAutoLayout = useCallback(() => {
+    setNodes((nds) => {
+      const laid = autoLayout(nds, edges);
+      pushHistory(laid, edges);
+      return laid;
+    });
+  }, [edges, pushHistory]);
 
   const loadDiagram = useCallback((diagram: Diagram) => {
     setNodes(diagram.nodes);
@@ -177,5 +227,6 @@ export function useDiagramStore() {
     saveDiagramToLocalStorage, loadDiagramFromLocalStorage,
     undo, redo,
     setNodes, setEdges,
+    selectAll, groupSelectedNodes, runAutoLayout,
   };
 }
