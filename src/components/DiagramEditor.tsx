@@ -160,10 +160,13 @@ function Editor() {
           ? { type: MarkerType.ArrowClosed, color: edgeColor }
           : undefined;
 
+        // Override stroke width to 1.5 for cleaner look
+        const cleanStyle = { ...style, strokeWidth: Math.min((style as Record<string, unknown>).strokeWidth as number || 1.5, 2) };
+
         return {
           ...e,
           type: routing,
-          style,
+          style: cleanStyle,
           animated: e.data?.arrowType === "dashed",
           markerEnd,
           markerStart,
@@ -268,7 +271,7 @@ function Editor() {
   }, [contextMenu]);
 
   const bgColor = isDark ? COLORS.bg : "#FAF5F0";
-  const dotColor = isDark ? "#1a1a2e" : "#d4d0cb";
+  const dotColor = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)";
   const overlayBg = isDark ? "rgba(13, 13, 20, 0.85)" : "rgba(250, 245, 240, 0.9)";
   const overlayBorder = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
   const overlayText = isDark ? "#9CA3AF" : "#6B7280";
@@ -334,7 +337,7 @@ function Editor() {
             proOptions={{ hideAttribution: true }}
             defaultEdgeOptions={{
               type: "smoothstep",
-              style: { stroke: COLORS.ironclad, strokeWidth: 2 },
+              style: { stroke: COLORS.ironclad, strokeWidth: 1.5 },
               markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.ironclad },
             }}
             style={{ background: bgColor }}
@@ -375,7 +378,7 @@ function Editor() {
                 animation: "fade-in 0.3s ease",
               }}
             >
-              Drag from a dot on any node to another node to connect them
+              Hover a node to reveal handles, then drag to connect
             </div>
           )}
 
@@ -440,7 +443,7 @@ function Editor() {
             <div><kbd style={kbd}>⌘A</kbd> Select all</div>
             <div><kbd style={kbd}>⌘E</kbd> Export PNG</div>
             <div style={{ borderTop: `1px solid ${overlayBorder}`, marginTop: 6, paddingTop: 6, color: "#F97316" }}>
-              Drag handle dots to connect
+              Hover node → drag handle to connect
             </div>
           </div>
         </div>

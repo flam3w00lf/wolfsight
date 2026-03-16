@@ -8,7 +8,7 @@ export function autoLayout(
 ): WolfNode[] {
   const g = new dagre.graphlib.Graph();
   g.setDefaultEdgeLabel(() => ({}));
-  g.setGraph({ rankdir: direction, nodesep: 60, ranksep: 80, edgesep: 30 });
+  g.setGraph({ rankdir: direction, nodesep: 80, ranksep: 150, edgesep: 50 });
 
   nodes.forEach((node) => {
     const width = node.measured?.width ?? 180;
