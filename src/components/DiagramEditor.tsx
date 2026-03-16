@@ -9,6 +9,7 @@ import {
   useReactFlow,
   ReactFlowProvider,
   ConnectionMode,
+  SelectionMode,
   type NodeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -41,6 +42,13 @@ const kbdStyle: React.CSSProperties = {
   color: "#FAF5F0",
 };
 
+const kbdStyleLight: React.CSSProperties = {
+  ...kbdStyle,
+  background: "rgba(0,0,0,0.06)",
+  border: "1px solid rgba(0,0,0,0.12)",
+  color: "#1C1917",
+};
+
 function getEdgeStyle(arrowType: ArrowType) {
   const entry = ARROW_TYPES.find((a) => a.id === arrowType);
   return entry?.style || {};
@@ -48,12 +56,30 @@ function getEdgeStyle(arrowType: ArrowType) {
 
 function Editor() {
   const store = useDiagramStore();
-  const { zoomIn, zoomOut, fitView } = useReactFlow();
+  const { zoomIn, zoomOut, fitView, getNodes } = useReactFlow();
   const flowRef = useRef<HTMLDivElement>(null);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [showConnectHint, setShowConnectHint] = useState(true);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  // Load theme from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("wolfsight-theme");
+    if (saved === "light" || saved === "dark") setTheme(saved);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      localStorage.setItem("wolfsight-theme", next);
+      return next;
+    });
+  }, []);
+
+  const isDark = theme === "dark";
 
   // Dismiss the connect hint after 8 seconds or on first connect
   useEffect(() => {
@@ -79,9 +105,11 @@ function Editor() {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT";
+
       if (e.key === "Delete" || e.key === "Backspace") {
-        const target = e.target as HTMLElement;
-        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT") return;
+        if (isInput) return;
         store.deleteSelected();
       }
       if ((e.metaKey || e.ctrlKey) && e.key === "z") {
@@ -89,9 +117,19 @@ function Editor() {
         if (e.shiftKey) store.redo();
         else store.undo();
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === "a") {
+        if (isInput) return;
+        e.preventDefault();
+        store.selectAll();
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "e") {
+        e.preventDefault();
+        handleExportPNG();
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store]);
 
   const selectedNode = useMemo(
@@ -138,11 +176,35 @@ function Editor() {
     if (!flowRef.current) return;
     const el = flowRef.current.querySelector(".react-flow__viewport") as HTMLElement;
     if (!el) return;
+
+    // Get bounds of all nodes to capture full diagram
+    const allNodes = getNodes();
+    if (allNodes.length === 0) return;
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    allNodes.forEach((n) => {
+      const w = n.measured?.width ?? 180;
+      const h = n.measured?.height ?? 60;
+      minX = Math.min(minX, n.position.x);
+      minY = Math.min(minY, n.position.y);
+      maxX = Math.max(maxX, n.position.x + w);
+      maxY = Math.max(maxY, n.position.y + h);
+    });
+
+    const padding = 60;
+    const diagramWidth = maxX - minX + padding * 2;
+    const diagramHeight = maxY - minY + padding * 2;
+
     try {
       const dataUrl = await toPng(el, {
-        backgroundColor: COLORS.bg,
-        width: 1920,
-        height: 1080,
+        backgroundColor: isDark ? COLORS.bg : "#FAF5F0",
+        width: diagramWidth,
+        height: diagramHeight,
+        style: {
+          width: `${diagramWidth}px`,
+          height: `${diagramHeight}px`,
+          transform: `translate(${-minX + padding}px, ${-minY + padding}px) scale(1)`,
+        },
       });
       const link = document.createElement("a");
       link.download = `${store.title.replace(/\s+/g, "-").toLowerCase()}.png`;
@@ -151,7 +213,7 @@ function Editor() {
     } catch (err) {
       console.error("PNG export failed:", err);
     }
-  }, [store.title]);
+  }, [store.title, isDark, getNodes]);
 
   const handleExportJSON = useCallback(() => {
     const diagram = store.exportDiagram();
@@ -183,8 +245,38 @@ function Editor() {
     input.click();
   }, [store]);
 
+  // Context menu for grouping
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    const selected = store.nodes.filter((n) => n.selected);
+    if (selected.length >= 2) {
+      e.preventDefault();
+      setContextMenu({ x: e.clientX, y: e.clientY });
+    }
+  }, [store.nodes]);
+
+  const handleGroup = useCallback(() => {
+    store.groupSelectedNodes();
+    setContextMenu(null);
+  }, [store]);
+
+  // Close context menu on click anywhere
+  useEffect(() => {
+    if (!contextMenu) return;
+    const handler = () => setContextMenu(null);
+    window.addEventListener("click", handler);
+    return () => window.removeEventListener("click", handler);
+  }, [contextMenu]);
+
+  const bgColor = isDark ? COLORS.bg : "#FAF5F0";
+  const dotColor = isDark ? "#1a1a2e" : "#d4d0cb";
+  const overlayBg = isDark ? "rgba(13, 13, 20, 0.85)" : "rgba(250, 245, 240, 0.9)";
+  const overlayBorder = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+  const overlayText = isDark ? "#9CA3AF" : "#6B7280";
+  const overlayTitle = isDark ? "#FAF5F0" : "#1C1917";
+  const kbd = isDark ? kbdStyle : kbdStyleLight;
+
   return (
-    <div className="flex flex-col h-screen bg-[#0a0a0f]">
+    <div className="flex flex-col h-screen" style={{ background: bgColor }}>
       <Toolbar
         title={store.title}
         onTitleChange={store.setTitle}
@@ -199,10 +291,14 @@ function Editor() {
         onToggleLayers={() => store.setShowLayers(!store.showLayers)}
         onExportPNG={handleExportPNG}
         onExportJSON={handleExportJSON}
+        onImportJSON={handleImportJSON}
         onLoadTemplate={() => setTemplateModalOpen(true)}
         onDeleteSelected={store.deleteSelected}
+        onAutoLayout={store.runAutoLayout}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden" onContextMenu={handleContextMenu}>
         <NodePalette
           onAddNode={store.addNode}
           collapsed={leftCollapsed}
@@ -232,28 +328,32 @@ function Editor() {
             snapToGrid
             snapGrid={[20, 20]}
             fitView
+            selectionOnDrag
+            selectionMode={SelectionMode.Partial}
+            multiSelectionKeyCode="Shift"
             proOptions={{ hideAttribution: true }}
             defaultEdgeOptions={{
               type: "smoothstep",
               style: { stroke: COLORS.ironclad, strokeWidth: 2 },
               markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.ironclad },
             }}
-            style={{ background: COLORS.bg }}
+            style={{ background: bgColor }}
           >
             {store.showGrid && (
               <Background
                 variant={BackgroundVariant.Dots}
                 gap={20}
                 size={1}
-                color="#1a1a2e"
+                color={dotColor}
               />
             )}
             <Controls
               showInteractive={false}
-              style={{ background: "#0d0d14", borderColor: "#ffffff15", borderRadius: 8 }}
+              style={{ background: isDark ? "#0d0d14" : "#f5f0eb", borderColor: overlayBorder, borderRadius: 8 }}
             />
             <LayerBands visible={store.showLayers} />
           </ReactFlow>
+
           {/* Connection hint tooltip */}
           {showConnectHint && (
             <div
@@ -278,28 +378,68 @@ function Editor() {
               Drag from a dot on any node to another node to connect them
             </div>
           )}
-          {/* Help overlay */}
+
+          {/* Context menu for grouping */}
+          {contextMenu && (
+            <div
+              style={{
+                position: "fixed",
+                top: contextMenu.y,
+                left: contextMenu.x,
+                background: isDark ? "#1a1a2e" : "#fff",
+                border: `1px solid ${overlayBorder}`,
+                borderRadius: 6,
+                padding: 4,
+                zIndex: 100,
+                boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
+              }}
+            >
+              <button
+                onClick={handleGroup}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  padding: "6px 16px",
+                  fontSize: 12,
+                  color: isDark ? "#FAF5F0" : "#1C1917",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  borderRadius: 4,
+                  textAlign: "left",
+                }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.background = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)"; }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.background = "transparent"; }}
+              >
+                Group Selected
+              </button>
+            </div>
+          )}
+
+          {/* Keyboard shortcuts help overlay */}
           <div
             style={{
               position: "absolute",
               bottom: 12,
               right: 12,
-              background: "rgba(13, 13, 20, 0.85)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: overlayBg,
+              border: `1px solid ${overlayBorder}`,
               borderRadius: 8,
               padding: "10px 14px",
               fontSize: 11,
-              color: "#9CA3AF",
+              color: overlayText,
               zIndex: 40,
               lineHeight: 1.7,
               backdropFilter: "blur(8px)",
             }}
           >
-            <div style={{ fontWeight: 700, color: "#FAF5F0", marginBottom: 4, fontSize: 12 }}>Shortcuts</div>
-            <div><kbd style={kbdStyle}>Del</kbd> Delete selected</div>
-            <div><kbd style={kbdStyle}>⌘Z</kbd> Undo</div>
-            <div><kbd style={kbdStyle}>⌘⇧Z</kbd> Redo</div>
-            <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginTop: 6, paddingTop: 6, color: "#F97316" }}>
+            <div style={{ fontWeight: 700, color: overlayTitle, marginBottom: 4, fontSize: 12 }}>Shortcuts</div>
+            <div><kbd style={kbd}>Del</kbd> Delete selected</div>
+            <div><kbd style={kbd}>⌘Z</kbd> Undo</div>
+            <div><kbd style={kbd}>⌘⇧Z</kbd> Redo</div>
+            <div><kbd style={kbd}>⌘A</kbd> Select all</div>
+            <div><kbd style={kbd}>⌘E</kbd> Export PNG</div>
+            <div style={{ borderTop: `1px solid ${overlayBorder}`, marginTop: 6, paddingTop: 6, color: "#F97316" }}>
               Drag handle dots to connect
             </div>
           </div>
